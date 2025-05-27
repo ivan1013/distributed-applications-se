@@ -1,0 +1,24 @@
+@{
+    ViewData["Title"] = ViewBag.ErrorTitle ?? "Error";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <h1 class="display-4">@ViewBag.ErrorTitle</h1>
+            <p class="lead">@ViewBag.ErrorMessage</p>
+            
+            @if (!string.IsNullOrEmpty(ViewBag.ExceptionPath))
+            {
+                <p>Error occurred while processing: @ViewBag.ExceptionPath</p>
+            }
+            
+            @if (!string.IsNullOrEmpty(ViewBag.ExceptionMessage))
+            {
+                <p class="text-danger">@ViewBag.ExceptionMessage</p>
+            }
+            
+            <a asp-controller="Teams" asp-action="Index" class="btn btn-primary">Return Home</a>
+        </div>
+    </div>
+</div>

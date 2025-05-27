@@ -1,0 +1,178 @@
+@model eSportsManagementSystem.ViewModels.TeamSearchViewModel
+@{
+    ViewData["Title"] = "Teams";
+    var nextSort = Model.SortDirection?.ToLower() == "asc" ? "desc" : "asc";
+}
+
+<h1>Teams</h1>
+
+<div class="mb-3">
+    <form method="get" asp-action="Index" class="row g-3">
+        <div class="col-md-4">
+            <div class="input-group">
+                <span class="input-group-text">Name</span>
+                <input type="text" name="Name" class="form-control" value="@Model.Name" 
+                       placeholder="Search by name..." />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="input-group">
+                <span class="input-group-text">Region</span>
+                <input type="text" name="Region" class="form-control" value="@Model.Region" 
+                       placeholder="Search by region..." />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-primary">Search</button>
+            <a asp-action="Index" class="btn btn-secondary">Clear</a>
+            <a asp-action="Create" class="btn btn-success">Create New</a>
+        </div>
+
+        <input type="hidden" name="SortBy" value="@Model.SortBy" />
+        <input type="hidden" name="SortDirection" value="@Model.SortDirection" />
+        <input type="hidden" name="PageNumber" value="@Model.PageNumber" />
+        <input type="hidden" name="PageSize" value="@Model.PageSize" />
+    </form>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    <a class="sort-link @(Model.SortBy == "name" ? "active" : "")"
+                       asp-action="Index"
+                       asp-route-name="@Model.Name"
+                       asp-route-region="@Model.Region"
+                       asp-route-sortBy="name"
+                       asp-route-sortDirection="@(Model.SortBy == "name" ? nextSort : "asc")"
+                       asp-route-pageNumber="@Model.PageNumber">
+                        Name
+                        <i class="bi bi-arrow-@(Model.SortBy == "name" && Model.SortDirection?.ToLower() == "desc" ? "down" : "up")"></i>
+                    </a>
+                </th>
+                <th>
+                    <a class="sort-link @(Model.SortBy == "region" ? "active" : "")"
+                       asp-action="Index"
+                       asp-route-name="@Model.Name"
+                       asp-route-region="@Model.Region"
+                       asp-route-sortBy="region"
+                       asp-route-sortDirection="@(Model.SortBy == "region" ? nextSort : "asc")"
+                       asp-route-pageNumber="@Model.PageNumber">
+                        Region
+                        <i class="bi bi-arrow-@(Model.SortBy == "region" && Model.SortDirection?.ToLower() == "desc" ? "down" : "up")"></i>
+                    </a>
+                </th>
+                <th>
+                    <a class="sort-link @(Model.SortBy == "rating" ? "active" : "")"
+                       asp-action="Index"
+                       asp-route-name="@Model.Name"
+                       asp-route-region="@Model.Region"
+                       asp-route-sortBy="rating"
+                       asp-route-sortDirection="@(Model.SortBy == "rating" ? nextSort : "asc")"
+                       asp-route-pageNumber="@Model.PageNumber">
+                        Rating
+                        <i class="bi bi-arrow-@(Model.SortBy == "rating" && Model.SortDirection?.ToLower() == "desc" ? "down" : "up")"></i>
+                    </a>
+                </th>
+                <th>
+                    <a class="sort-link @(Model.SortBy == "foundedDate" ? "active" : "")"
+                       asp-action="Index"
+                       asp-route-name="@Model.Name"
+                       asp-route-region="@Model.Region"
+                       asp-route-sortBy="foundedDate"
+                       asp-route-sortDirection="@(Model.SortBy == "foundedDate" ? nextSort : "asc")"
+                       asp-route-pageNumber="@Model.PageNumber">
+                        Founded Date
+                        <i class="bi bi-arrow-@(Model.SortBy == "foundedDate" && Model.SortDirection?.ToLower() == "desc" ? "down" : "up")"></i>
+                    </a>
+                </th>
+                <th>
+                    <a class="sort-link @(Model.SortBy == "isActive" ? "active" : "")"
+                       asp-action="Index"
+                       asp-route-name="@Model.Name"
+                       asp-route-region="@Model.Region"
+                       asp-route-sortBy="isActive"
+                       asp-route-sortDirection="@(Model.SortBy == "isActive" ? nextSort : "asc")"
+                       asp-route-pageNumber="@Model.PageNumber">
+                        Status
+                        <i class="bi bi-arrow-@(Model.SortBy == "isActive" && Model.SortDirection?.ToLower() == "desc" ? "down" : "up")"></i>
+                    </a>
+                </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Teams)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@(item.Region ?? "N/A")</td>
+                    <td>@(item.Rating?.ToString("F1") ?? "N/A")</td>
+                    <td>@(item.FoundedDate?.ToString("yyyy-MM-dd") ?? "N/A")</td>                    <td>
+                        <div class="status-icon">
+                            @if (item.IsActive)
+                            {
+                                <i class="bi bi-check-circle-fill text-success" title="Active"></i>
+                            }
+                            else
+                            {
+                                <i class="bi bi-x-circle-fill text-danger" title="Inactive"></i>
+                            }
+                        </div>
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <a asp-action="Edit" asp-route-id="@item.TeamId" class="btn btn-sm btn-primary">Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.TeamId" class="btn btn-sm btn-info">Details</a>
+                            <a asp-action="Delete" asp-route-id="@item.TeamId" class="btn btn-sm btn-danger">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (Model.TotalPages > 1)
+{
+    <nav>
+        <ul class="pagination">
+            @if (Model.HasPreviousPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Index"
+                       asp-route-name="@Model.Name"
+                       asp-route-region="@Model.Region"
+                       asp-route-sortBy="@Model.SortBy"
+                       asp-route-sortDirection="@Model.SortDirection"
+                       asp-route-pageNumber="@(Model.PageNumber - 1)">Previous</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" asp-action="Index"
+                       asp-route-name="@Model.Name"
+                       asp-route-region="@Model.Region"
+                       asp-route-sortBy="@Model.SortBy"
+                       asp-route-sortDirection="@Model.SortDirection"
+                       asp-route-pageNumber="@i">@i</a>
+                </li>
+            }
+
+            @if (Model.HasNextPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Index"
+                       asp-route-name="@Model.Name"
+                       asp-route-region="@Model.Region"
+                       asp-route-sortBy="@Model.SortBy"
+                       asp-route-sortDirection="@Model.SortDirection"
+                       asp-route-pageNumber="@(Model.PageNumber + 1)">Next</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

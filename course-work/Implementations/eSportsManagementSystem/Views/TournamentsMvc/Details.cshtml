@@ -1,0 +1,51 @@
+@using System.Globalization
+@model eSportsManagementSystem.ViewModels.TournamentViewModel
+
+@{
+    ViewData["Title"] = "Tournament Details";
+}
+
+<div class="container-fluid">
+    <h1 class="mt-4">Tournament Details</h1>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="bi bi-trophy me-1"></i>
+            Tournament Information
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">Title</dt>
+                        <dd class="col-sm-8">@Model.Title</dd>
+
+                        <dt class="col-sm-4">Start Date</dt>
+                        <dd class="col-sm-8">@(Model.StartDate?.ToString("yyyy-MM-dd") ?? "N/A")</dd>
+
+                        <dt class="col-sm-4">End Date</dt>
+                        <dd class="col-sm-8">@(Model.EndDate?.ToString("yyyy-MM-dd") ?? "N/A")</dd>
+                    </dl>
+                </div>
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">Prize Pool</dt>
+                        <dd class="col-sm-8">@(Model.PrizePool.HasValue ? $"{Model.PrizePool:N0} лв." : "N/A")</dd>
+
+                        <dt class="col-sm-4">Location</dt>
+                        <dd class="col-sm-8">@(Model.Location ?? "N/A")</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="btn-group">
+                <a asp-action="Edit" asp-route-id="@Model.TournamentId" class="btn btn-primary">
+                    <i class="bi bi-pencil"></i> Edit
+                </a>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

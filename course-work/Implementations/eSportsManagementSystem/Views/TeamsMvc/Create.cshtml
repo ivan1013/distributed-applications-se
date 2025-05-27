@@ -1,0 +1,36 @@
+@model eSportsManagementSystem.ViewModels.TeamViewModel
+@{
+    ViewData["Title"] = "Create Team";
+}
+<h2>Create Team</h2>
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Region" class="form-label"></label>
+        <input asp-for="Region" class="form-control" />
+        <span asp-validation-for="Region" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="FoundedDate" class="form-label"></label>
+        <input asp-for="FoundedDate" class="form-control" type="date" />
+        <span asp-validation-for="FoundedDate" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Rating" class="form-label"></label>
+        <input asp-for="Rating" class="form-control" />
+        <span asp-validation-for="Rating" class="text-danger"></span>
+    </div>
+    <div class="mb-3 form-check">
+        <input asp-for="IsActive" class="form-check-input" />
+        <label asp-for="IsActive" class="form-check-label"></label>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

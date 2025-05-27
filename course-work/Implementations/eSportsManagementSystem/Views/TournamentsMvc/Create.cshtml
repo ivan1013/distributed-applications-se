@@ -1,0 +1,75 @@
+@model eSportsManagementSystem.ViewModels.TournamentViewModel
+
+@{
+    ViewData["Title"] = "Create Tournament";
+}
+
+<h1>Create Tournament</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" required />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>            <div class="form-group mb-3">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" class="form-control" type="date" value="@(Model?.StartDate?.ToString("yyyy-MM-dd"))" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="EndDate" class="control-label"></label>
+                <input asp-for="EndDate" class="form-control" type="date" value="@(Model?.EndDate?.ToString("yyyy-MM-dd"))" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="PrizePool" class="control-label"></label>
+                <input asp-for="PrizePool" class="form-control" />
+                <span asp-validation-for="PrizePool" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Location" class="control-label"></label>
+                <input asp-for="Location" class="form-control" />
+                <span asp-validation-for="Location" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(document).ready(function () {
+            // Update min date for end date when start date changes
+            $("#StartDate").change(function() {
+                var startDate = $(this).val();
+                $("#EndDate").attr("min", startDate);
+                
+                // If end date is before start date, update it
+                var endDate = $("#EndDate").val();
+                if (endDate < startDate) {
+                    $("#EndDate").val(startDate);
+                }
+            });
+
+            // Set initial minimum end date
+            var initialStartDate = $("#StartDate").val();
+            if (initialStartDate) {
+                $("#EndDate").attr("min", initialStartDate);
+            }
+        });
+    </script>
+}

@@ -1,0 +1,55 @@
+@model eSportsManagementSystem.ViewModels.PlayerViewModel
+@{
+    ViewData["Title"] = "Player Details";
+}
+
+<div class="container-fluid">
+    <h1 class="mt-4">Player Details</h1>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="bi bi-person-badge me-1"></i>
+            Player Information
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">First Name</dt>
+                        <dd class="col-sm-8">@Model.FirstName</dd>
+
+                        <dt class="col-sm-4">Last Name</dt>
+                        <dd class="col-sm-8">@(Model.LastName ?? "N/A")</dd>
+
+                        <dt class="col-sm-4">Birth Date</dt>
+                        <dd class="col-sm-8">@(Model.BirthDate?.ToString("yyyy-MM-dd") ?? "N/A")</dd>
+
+                        <dt class="col-sm-4">Role</dt>
+                        <dd class="col-sm-8">@Model.Role</dd>
+                    </dl>
+                </div>
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">Rating</dt>
+                        <dd class="col-sm-8">@(Model.Rating?.ToString("F1") ?? "N/A")</dd>
+
+                        <dt class="col-sm-4">Team</dt>
+                        <dd class="col-sm-8">@(Model.TeamName ?? "No Team")</dd>
+
+                        <dt class="col-sm-4">Tournaments</dt>
+                        <dd class="col-sm-8">@Model.TournamentCount</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="btn-group">
+                <a asp-action="Edit" asp-route-id="@Model.PlayerId" class="btn btn-primary">
+                    <i class="bi bi-pencil"></i> Edit
+                </a>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

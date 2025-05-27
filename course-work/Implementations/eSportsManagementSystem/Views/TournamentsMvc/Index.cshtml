@@ -1,0 +1,174 @@
+@using System.Globalization
+@model IEnumerable<eSportsManagementSystem.ViewModels.TournamentViewModel>
+@{
+    ViewData["Title"] = "Tournaments";
+    var nextSort = ViewBag.SortDirection?.ToLower() == "asc" ? "desc" : "asc";
+    var bgCulture = new CultureInfo("bg-BG");
+}
+
+<h1>Tournaments</h1>
+
+<div class="mb-3">
+    <form method="get" asp-action="Index" class="row g-3">
+        <div class="col-md-4">
+            <div class="input-group">
+                <span class="input-group-text">Title</span>
+                <input type="text" name="SearchTerm" class="form-control" value="@ViewBag.SearchTerm" 
+                       placeholder="Search by title..." />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="input-group">
+                <span class="input-group-text">Location</span>
+                <input type="text" name="Location" class="form-control" value="@ViewBag.Location" 
+                       placeholder="Search by location..." />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-primary">Search</button>
+            <a asp-action="Index" class="btn btn-secondary">Clear</a>
+            <a asp-action="Create" class="btn btn-success">Create New</a>
+        </div>
+
+        <input type="hidden" name="SortBy" value="@ViewBag.SortBy" />
+        <input type="hidden" name="SortDirection" value="@ViewBag.SortDirection" />
+        <input type="hidden" name="PageNumber" value="@(ViewBag.CurrentPage ?? 1)" />
+        <input type="hidden" name="PageSize" value="@ViewBag.PageSize" />
+    </form>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    <a class="sort-link @(ViewBag.SortBy == "title" ? "active" : "")"
+                       asp-action="Index"
+                       asp-route-searchTerm="@ViewBag.SearchTerm"
+                       asp-route-location="@ViewBag.Location"
+                       asp-route-sortBy="title"
+                       asp-route-sortDirection="@(ViewBag.SortBy == "title" ? nextSort : "asc")"
+                       asp-route-pageNumber="@ViewBag.CurrentPage">
+                        Title
+                        <i class="bi bi-arrow-@(ViewBag.SortBy == "title" && ViewBag.SortDirection?.ToLower() == "desc" ? "down" : "up")"></i>
+                    </a>
+                </th>
+                <th>
+                    <a class="sort-link @(ViewBag.SortBy == "startDate" ? "active" : "")"
+                       asp-action="Index"
+                       asp-route-searchTerm="@ViewBag.SearchTerm"
+                       asp-route-location="@ViewBag.Location"
+                       asp-route-sortBy="startDate"
+                       asp-route-sortDirection="@(ViewBag.SortBy == "startDate" ? nextSort : "asc")"
+                       asp-route-pageNumber="@ViewBag.CurrentPage">
+                        Start Date
+                        <i class="bi bi-arrow-@(ViewBag.SortBy == "startDate" && ViewBag.SortDirection?.ToLower() == "desc" ? "down" : "up")"></i>
+                    </a>
+                </th>
+                <th>
+                    <a class="sort-link @(ViewBag.SortBy == "endDate" ? "active" : "")"
+                       asp-action="Index"
+                       asp-route-searchTerm="@ViewBag.SearchTerm"
+                       asp-route-location="@ViewBag.Location"
+                       asp-route-sortBy="endDate"
+                       asp-route-sortDirection="@(ViewBag.SortBy == "endDate" ? nextSort : "asc")"
+                       asp-route-pageNumber="@ViewBag.CurrentPage">
+                        End Date
+                        <i class="bi bi-arrow-@(ViewBag.SortBy == "endDate" && ViewBag.SortDirection?.ToLower() == "desc" ? "down" : "up")"></i>
+                    </a>
+                </th>
+                <th>
+                    <a class="sort-link @(ViewBag.SortBy == "prizePool" ? "active" : "")"
+                       asp-action="Index"
+                       asp-route-searchTerm="@ViewBag.SearchTerm"
+                       asp-route-location="@ViewBag.Location"
+                       asp-route-sortBy="prizePool"
+                       asp-route-sortDirection="@(ViewBag.SortBy == "prizePool" ? nextSort : "asc")"
+                       asp-route-pageNumber="@ViewBag.CurrentPage">
+                        Prize Pool
+                        <i class="bi bi-arrow-@(ViewBag.SortBy == "prizePool" && ViewBag.SortDirection?.ToLower() == "desc" ? "down" : "up")"></i>
+                    </a>
+                </th>
+                <th>
+                    <a class="sort-link @(ViewBag.SortBy == "location" ? "active" : "")"
+                       asp-action="Index"
+                       asp-route-searchTerm="@ViewBag.SearchTerm"
+                       asp-route-location="@ViewBag.Location"
+                       asp-route-sortBy="location"
+                       asp-route-sortDirection="@(ViewBag.SortBy == "location" ? nextSort : "asc")"
+                       asp-route-pageNumber="@ViewBag.CurrentPage">
+                        Location
+                        <i class="bi bi-arrow-@(ViewBag.SortBy == "location" && ViewBag.SortDirection?.ToLower() == "desc" ? "down" : "up")"></i>
+                    </a>
+                </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Title</td>
+                    <td>@(item.StartDate?.ToString("yyyy-MM-dd") ?? "N/A")</td>
+                    <td>@(item.EndDate?.ToString("yyyy-MM-dd") ?? "N/A")</td>                    <td>@(item.PrizePool.HasValue ? $"{item.PrizePool:N0} лв." : "N/A")</td>
+                    <td>@(item.Location ?? "N/A")</td>
+                    <td>
+                        <div class="btn-group">
+                            <a asp-action="Edit" asp-route-id="@item.TournamentId" class="btn btn-sm btn-primary">Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.TournamentId" class="btn btn-sm btn-info">Details</a>
+                            <a asp-action="Delete" asp-route-id="@item.TournamentId" class="btn btn-sm btn-danger">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@{
+    var totalPages = ViewBag.TotalPages ?? 1;
+    var currentPage = ViewBag.CurrentPage ?? 1;
+}
+
+@if (totalPages > 1)
+{
+    <nav>
+        <ul class="pagination">
+            @if (currentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Index"
+                       asp-route-searchTerm="@ViewBag.SearchTerm"
+                       asp-route-location="@ViewBag.Location"
+                       asp-route-sortBy="@ViewBag.SortBy"
+                       asp-route-sortDirection="@ViewBag.SortDirection"
+                       asp-route-pageNumber="@(currentPage - 1)">Previous</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                <li class="page-item @(i == currentPage ? "active" : "")">
+                    <a class="page-link" asp-action="Index"
+                       asp-route-searchTerm="@ViewBag.SearchTerm"
+                       asp-route-location="@ViewBag.Location"
+                       asp-route-sortBy="@ViewBag.SortBy"
+                       asp-route-sortDirection="@ViewBag.SortDirection"
+                       asp-route-pageNumber="@i">@i</a>
+                </li>
+            }
+
+            @if (currentPage < totalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Index"
+                       asp-route-searchTerm="@ViewBag.SearchTerm"
+                       asp-route-location="@ViewBag.Location"
+                       asp-route-sortBy="@ViewBag.SortBy"
+                       asp-route-sortDirection="@ViewBag.SortDirection"
+                       asp-route-pageNumber="@(currentPage + 1)">Next</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

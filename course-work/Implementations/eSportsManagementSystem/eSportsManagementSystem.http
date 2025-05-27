@@ -1,0 +1,6 @@
+@eSportsManagementSystem_HostAddress = http://localhost:5211
+
+GET {{eSportsManagementSystem_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,68 @@
+@model eSportsManagementSystem.ViewModels.PlayerViewModel
+
+@{
+    ViewData["Title"] = "Edit Player";
+}
+
+<h2>Edit Player</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="PlayerId" />
+            
+            <div class="mb-3">
+                <label asp-for="FirstName" class="form-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="LastName" class="form-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="BirthDate" class="form-label"></label>
+                <input asp-for="BirthDate" class="form-control" type="date" value="@(Model.BirthDate?.ToString("yyyy-MM-dd"))" />
+                <span asp-validation-for="BirthDate" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Rating" class="form-label"></label>
+                <input asp-for="Rating" class="form-control" type="number" step="0.1" min="0" max="100" />
+                <span asp-validation-for="Rating" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Role" class="form-label"></label>
+                <select asp-for="Role" class="form-control">
+                    <option value="">Select Role</option>
+                    <option value="Top">Top</option>
+                    <option value="Jungle">Jungle</option>
+                    <option value="Mid">Mid</option>
+                    <option value="Bot">Bot</option>
+                    <option value="Support">Support</option>
+                </select>
+                <span asp-validation-for="Role" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="TeamId" class="form-label"></label>
+                <select asp-for="TeamId" class="form-control" asp-items="ViewBag.Teams">
+                    <option value="">Select Team</option>
+                </select>
+                <span asp-validation-for="TeamId" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

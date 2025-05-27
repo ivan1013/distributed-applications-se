@@ -1,0 +1,197 @@
+@model IEnumerable<eSportsManagementSystem.ViewModels.PlayerViewModel>
+@{
+    ViewData["Title"] = "Players";
+    var nextSort = ViewBag.SortDirection?.ToLower() == "asc" ? "desc" : "asc";
+}
+
+<h1>Players</h1>
+
+<div class="mb-3">
+    <form method="get" asp-action="Index" class="row g-3">
+        <div class="col-md-3">
+            <div class="input-group">
+                <span class="input-group-text">Search</span>
+                <input type="text" name="SearchTerm" class="form-control" value="@ViewBag.SearchTerm" 
+                       placeholder="Search by name..." />
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="input-group">
+                <span class="input-group-text">Role</span>
+                <select name="Role" class="form-control">
+                    <option value="">All Roles</option>
+                    @{
+                        var roles = new[] { "Top", "Jungle", "Mid", "Bot", "Support" };
+                        foreach (var role in roles)
+                        {
+                            <option value="@role" selected="@(ViewBag.Role == role)">@role</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="input-group">
+                <span class="input-group-text">Team</span>
+                <select name="TeamId" class="form-control" asp-items="ViewBag.Teams">
+                    <option value="">All Teams</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary">Search</button>
+            <a asp-action="Index" class="btn btn-secondary">Clear</a>
+            <a asp-action="Create" class="btn btn-success">Create New</a>
+        </div>
+
+        <input type="hidden" name="SortBy" value="@ViewBag.SortBy" />
+        <input type="hidden" name="SortDirection" value="@ViewBag.SortDirection" />
+        <input type="hidden" name="PageNumber" value="@(ViewBag.CurrentPage ?? 1)" />
+        <input type="hidden" name="PageSize" value="@ViewBag.PageSize" />
+    </form>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    <a class="sort-link @(ViewBag.SortBy == "name" ? "active" : "")" 
+                       asp-action="Index"
+                       asp-route-searchTerm="@ViewBag.SearchTerm"
+                       asp-route-role="@ViewBag.Role"
+                       asp-route-teamId="@ViewBag.TeamId"
+                       asp-route-sortBy="name"
+                       asp-route-sortDirection="@(ViewBag.SortBy == "name" ? nextSort : "asc")"
+                       asp-route-pageNumber="@ViewBag.CurrentPage">
+                        Name
+                        <i class="bi bi-arrow-@(ViewBag.SortBy == "name" && ViewBag.SortDirection?.ToLower() == "desc" ? "down" : "up")"></i>
+                    </a>
+                </th>
+                <th>
+                    <a class="sort-link @(ViewBag.SortBy == "role" ? "active" : "")"
+                       asp-action="Index"
+                       asp-route-searchTerm="@ViewBag.SearchTerm"
+                       asp-route-role="@ViewBag.Role"
+                       asp-route-teamId="@ViewBag.TeamId"
+                       asp-route-sortBy="role"
+                       asp-route-sortDirection="@(ViewBag.SortBy == "role" ? nextSort : "asc")"
+                       asp-route-pageNumber="@ViewBag.CurrentPage">
+                        Role
+                        <i class="bi bi-arrow-@(ViewBag.SortBy == "role" && ViewBag.SortDirection?.ToLower() == "desc" ? "down" : "up")"></i>
+                    </a>
+                </th>
+                <th>
+                    <a class="sort-link @(ViewBag.SortBy == "team" ? "active" : "")"
+                       asp-action="Index"
+                       asp-route-searchTerm="@ViewBag.SearchTerm"
+                       asp-route-role="@ViewBag.Role"
+                       asp-route-teamId="@ViewBag.TeamId"
+                       asp-route-sortBy="team"
+                       asp-route-sortDirection="@(ViewBag.SortBy == "team" ? nextSort : "asc")"
+                       asp-route-pageNumber="@ViewBag.CurrentPage">
+                        Team
+                        <i class="bi bi-arrow-@(ViewBag.SortBy == "team" && ViewBag.SortDirection?.ToLower() == "desc" ? "down" : "up")"></i>
+                    </a>
+                </th>
+                <th>
+                    <a class="sort-link @(ViewBag.SortBy == "rating" ? "active" : "")"
+                       asp-action="Index"
+                       asp-route-searchTerm="@ViewBag.SearchTerm"
+                       asp-route-role="@ViewBag.Role"
+                       asp-route-teamId="@ViewBag.TeamId"
+                       asp-route-sortBy="rating"
+                       asp-route-sortDirection="@(ViewBag.SortBy == "rating" ? nextSort : "asc")"
+                       asp-route-pageNumber="@ViewBag.CurrentPage">
+                        Rating
+                        <i class="bi bi-arrow-@(ViewBag.SortBy == "rating" && ViewBag.SortDirection?.ToLower() == "desc" ? "down" : "up")"></i>
+                    </a>
+                </th>
+                <th>
+                    <a class="sort-link @(ViewBag.SortBy == "birthDate" ? "active" : "")"
+                       asp-action="Index"
+                       asp-route-searchTerm="@ViewBag.SearchTerm"
+                       asp-route-role="@ViewBag.Role"
+                       asp-route-teamId="@ViewBag.TeamId"
+                       asp-route-sortBy="birthDate"
+                       asp-route-sortDirection="@(ViewBag.SortBy == "birthDate" ? nextSort : "asc")"
+                       asp-route-pageNumber="@ViewBag.CurrentPage">
+                        Birth Date
+                        <i class="bi bi-arrow-@(ViewBag.SortBy == "birthDate" && ViewBag.SortDirection?.ToLower() == "desc" ? "down" : "up")"></i>
+                    </a>
+                </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.FirstName @item.LastName</td>
+                    <td>@item.Role</td>
+                    <td>@(item.TeamName ?? "No Team")</td>
+                    <td>@(item.Rating?.ToString("F1") ?? "N/A")</td>
+                    <td>@(item.BirthDate?.ToString("yyyy-MM-dd"))</td>
+                    <td>
+                        <div class="btn-group">
+                            <a asp-action="Edit" asp-route-id="@item.PlayerId" class="btn btn-sm btn-primary">Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.PlayerId" class="btn btn-sm btn-info">Details</a>
+                            <a asp-action="Delete" asp-route-id="@item.PlayerId" class="btn btn-sm btn-danger">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@{
+    var totalPages = ViewBag.TotalPages ?? 1;
+    var currentPage = ViewBag.CurrentPage ?? 1;
+}
+
+@if (totalPages > 1)
+{
+    <nav>
+        <ul class="pagination">
+            @if (currentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Index"
+                       asp-route-searchTerm="@ViewBag.SearchTerm"
+                       asp-route-role="@ViewBag.Role"
+                       asp-route-teamId="@ViewBag.TeamId"
+                       asp-route-sortBy="@ViewBag.SortBy"
+                       asp-route-sortDirection="@ViewBag.SortDirection"
+                       asp-route-pageNumber="@(currentPage - 1)">Previous</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                <li class="page-item @(i == currentPage ? "active" : "")">
+                    <a class="page-link" asp-action="Index"
+                       asp-route-searchTerm="@ViewBag.SearchTerm"
+                       asp-route-role="@ViewBag.Role"
+                       asp-route-teamId="@ViewBag.TeamId"
+                       asp-route-sortBy="@ViewBag.SortBy"
+                       asp-route-sortDirection="@ViewBag.SortDirection"
+                       asp-route-pageNumber="@i">@i</a>
+                </li>
+            }
+
+            @if (currentPage < totalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Index"
+                       asp-route-searchTerm="@ViewBag.SearchTerm"
+                       asp-route-role="@ViewBag.Role"
+                       asp-route-teamId="@ViewBag.TeamId"
+                       asp-route-sortBy="@ViewBag.SortBy"
+                       asp-route-sortDirection="@ViewBag.SortDirection"
+                       asp-route-pageNumber="@(currentPage + 1)">Next</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

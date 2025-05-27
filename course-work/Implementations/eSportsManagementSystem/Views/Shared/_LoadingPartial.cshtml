@@ -1,0 +1,41 @@
+<!-- Loading spinner that can be shown/hidden -->
+<div id="loading-spinner" class="d-none">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+<!-- JavaScript to handle loading states -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Show loading spinner when a form is submitted
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function () {
+                document.getElementById('loading-spinner').classList.remove('d-none');
+            });
+        });
+
+        // Show loading spinner when clicking links that aren't within the same page
+        document.querySelectorAll('a:not([href^="#"])').forEach(link => {
+            link.addEventListener('click', function (e) {
+                // Don't show spinner for links that open in new windows/tabs
+                if (!e.ctrlKey && !e.shiftKey && !this.target) {
+                    document.getElementById('loading-spinner').classList.remove('d-none');
+                }
+            });
+        });
+    });
+</script>
+
+<style>
+    #loading-spinner {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 9999;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 20px;
+        border-radius: 10px;
+    }
+</style>
